@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Теория · в стиле практики</title>
+    <style>
+        /* БАЗОВЫЙ СТИЛЬ — ПОЛНОСТЬЮ КОПИРУЕТ СТРАНИЦУ ПРАКТИКИ (ПОЛЯ, КАРТОЧКИ, ТЕНИ) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #f2f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        /* карточка — те же самые размеры, скругления, тени, что и в практике */
+        .card {
+            max-width: 420px;
+            width: 100%;
+            background-color: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -8px rgba(0, 20, 45, 0.15);
+            padding: 24px 20px 28px;
+            transition: all 0.2s;
+        }
+
+        /* статус бар (20:59) — как в практике, но время другое */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1c2e45;
+            margin-bottom: 20px;
+            letter-spacing: 0.2px;
+        }
+
+        .signal-icons {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .signal-icons span {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background-color: #1c2e45;
+            border-radius: 10px;
+        }
+
+        .battery-symbol {
+            display: inline-block;
+            width: 22px;
+            height: 10px;
+            background: #1c2e45;
+            border-radius: 3px;
+            position: relative;
+            margin-left: 5px;
+        }
+        .battery-symbol::after {
+            content: "";
+            position: absolute;
+            right: -3px;
+            top: 2px;
+            width: 3px;
+            height: 4px;
+            background: #1c2e45;
+            border-radius: 1px;
+        }
+
+        /* ЗАГОЛОВОК ТЕОРИЯ — такой же жирный, как ПРАКТИКА */
+        .theory-header {
+            margin-bottom: 8px;
+        }
+        .theory-header h1 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #0b1b2f;
+            line-height: 1.1;
+            letter-spacing: -0.3px;
+        }
+
+        /* маленький счётчик заданий (аналогично 5350 заданий), но тут "12 разделов" — для ритма */
+        .sections-count {
+            background-color: #eef2f7;
+            padding: 8px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1f3a5f;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+            letter-spacing: 0.3px;
+            margin-bottom: 18px;
+            display: inline-block;
+        }
+
+        /* ПОДЗАГОЛОВОК Учебник (как Наставник в практике) */
+        .textbook-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f7f9fc;
+            padding: 12px 18px;
+            border-radius: 60px;
+            margin-bottom: 24px;
+            border: 1px solid #e9edf3;
+        }
+        .textbook-label {
+            font-weight: 500;
+            color: #2b3f59;
+            font-size: 16px;
+        }
+        .textbook-value {
+            background: white;
+            border: 1px solid #d0dae8;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1f3a5f;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            cursor: default;
+        }
+
+        /* ОПИСАНИЕ (точно такая же карточка, как в практике "Задания по номерам") */
+        .description-block {
+            background: white;
+            border-radius: 24px;
+            padding: 18px 20px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.02), 0 0 0 1px #eef2f7 inset;
+            border: 1px solid #e9edf4;
+            margin-bottom: 20px;
+        }
+        .description-block p {
+            font-size: 16px;
+            color: #2b3f59;
+            line-height: 1.5;
+            font-weight: 450;
+        }
+
+        /* сетка 2 колонки, как в практике (Отработка/Избранное), но тут Фигуры и Термины */
+        .double-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .double-card {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            padding: 18px 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02), 0 0 0 1px #eef2f7 inset;
+            border: 1px solid #e9edf4;
+        }
+        .double-card h3 {
+            font-weight: 660;
+            font-size: 20px;
+            color: #0b1f36;
+            margin-bottom: 6px;
+        }
+        .double-card p {
+            font-size: 14.5px;
+            color: #62748c;
+            line-height: 1.4;
+        }
+
+        /* широкая карточка (как Калькулятор баллов) — для Видеоразборов */
+        .wide-card {
+            background: white;
+            border-radius: 24px;
+            padding: 18px 22px;
+            margin: 6px 0 16px 0;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.02), 0 0 0 1px #eef2f7 inset;
+            border: 1px solid #e9edf4;
+        }
+        .wide-card h3 {
+            font-weight: 660;
+            font-size: 22px;
+            color: #0b1f36;
+            margin-bottom: 8px;
+        }
+        .wide-card p {
+            font-size: 15.5px;
+            color: #3f556f;
+            line-height: 1.5;
+            font-weight: 430;
+        }
+
+        /* дополнительный блок Теоремы и аксиомы — стилизуем как "Отработка ошибок", но на всю ширину */
+        .extra-block {
+            background: white;
+            border-radius: 24px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02), 0 0 0 1px #eef2f7 inset;
+            border: 1px solid #e9edf4;
+            margin: 12px 0 10px 0;
+        }
+        .extra-icon {
+            font-size: 32px;
+            background: #edf3fa;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+        }
+        .extra-content h4 {
+            font-weight: 660;
+            font-size: 18px;
+            color: #0b1f36;
+            margin-bottom: 2px;
+        }
+        .extra-content p {
+            font-size: 14px;
+            color: #62748c;
+        }
+
+        /* крошечный футер (как в практике) */
+        .small-note {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 18px;
+            font-size: 13px;
+            color: #8a9bb0;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- строка состояния 20:59 (как на скрине теории) -->
+        <div class="status-bar">
+            <div class="signal-icons">
+            </div>
+        </div>
+
+        <!-- ТЕОРИЯ + индикатор (как ПРАКТИКА + 5350 заданий) -->
+        <div class="theory-header">
+            <h1>ТЕОРИЯ</h1>
+        </div>
+        <div class="sections-count">12 разделов</div>
+
+        <!-- Учебник (аналог "Наставник / Поменять") -->
+        <div class="textbook-row">
+            <span class="textbook-label">Учебник</span>
+            <span class="textbook-value">Весь материал</span>
+        </div>
+
+        <!-- Описание: в точности как на скринах теории, но в карточке как в практике -->
+        <div class="description-block">
+            <p>Здесь находится вся необходимая теория для сдачи экзамена на высший балл!</p>
+        </div>
+
+        <!-- Двойная карточка: Фигуры | Термины (стилизовано под "Отработка ошибок / Избранное") -->
+        <div class="double-row">
+            <div class="double-card">
+                <h3>Фигуры</h3>
+                <p>Таблицы и схемы</p>
+            </div>
+            <div class="double-card">
+                <h3>Термины</h3>
+                <p>Формулы</p>
+            </div>
+        </div>
+
+        <!-- Видеоразборы — широкая карточка (как Калькулятор баллов) -->
+        <div class="wide-card">
+            <h3>Видеоразборы</h3>
+            <p>Тот самый канал, который ты искал — просто не знал, что он существует.</p>
+        </div>
+
+        <!-- Теоремы и аксиомы — отдельно (как дополнительный элемент в стиле практики) -->
+        <div class="extra-block">
+            <div class="extra-icon">📐</div>
+            <div class="extra-content">
+                <h4>Теоремы и аксиомы</h4>
+                <p>Основополагающие утверждения</p>
+            </div>
+        </div>
+
+        <!-- маленькая подпись (как в практике "ЕГЭ 2026 • подготовка") -->
+        <div class="small-note">
+            <span>📘 база знаний · ЕГЭ</span>
+        </div>
+    </div>
+</body>
+</html>
