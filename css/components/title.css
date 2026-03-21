@@ -1,0 +1,16 @@
+.title {
+    font-size: 30px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+}
+
+.title .bottom {
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 5px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

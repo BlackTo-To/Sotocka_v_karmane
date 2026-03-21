@@ -1,0 +1,11 @@
+.status-icons {
+    display: flex;
+    gap: 8px;
+}
+
+.status-icons span {
+    width: 18px;
+    height: 18px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 4px;
+}
