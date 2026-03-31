@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Практика</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #7c8cd1 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+        }
+
+        /* Кнопка назад */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        .back-arrow {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* Основной контент */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px 20px;
+        }
+
+        /* Заголовок страницы */
+        .page-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            letter-spacing: -1px;
+        }
+
+        /* Сетка для тестов ЕГЭ */
+        .tests-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .test-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            background: white;
+        }
+
+        .test-card h3 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 8px;
+        }
+
+        .test-card p {
+            color: #4a5568;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .test-icon {
+            font-size: 20px;
+        }
+
+        /* Разделы практики */
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .practice-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            background: white;
+        }
+
+        .practice-card h2 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .practice-card h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .practice-card p {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        /* Случайный вопрос */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            background: white;
+        }
+
+        .card h2 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #000000;         
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .card h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+
+        .card p {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Разделители */
+        .divider {
+        margin: 30px 0;
+        border: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Задержки анимации */
+        .test-card:nth-child(1) { animation-delay: 0.1s; }
+        .test-card:nth-child(2) { animation-delay: 0.15s; }
+        .practice-card:nth-child(1) { animation-delay: 0.2s; }
+        .practice-card:nth-child(2) { animation-delay: 0.25s; }
+        .small-card:nth-child(1) { animation-delay: 0.3s; }
+        .small-card:nth-child(2) { animation-delay: 0.35s; }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .back-button {
+                top: 20px;
+                left: 20px;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 50px 10px 10px;
+            }
+
+            .page-title {
+                font-size: 36px;
+            }
+
+            .tasks-counter {
+                font-size: 20px;
+            }
+
+            .tests-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .small-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-card h2 {
+                font-size: 24px;
+            }
+
+            .practice-card p {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-button span:last-child {
+                display: none;
+            }
+            
+            .back-button {
+                padding: 12px;
+                border-radius: 50%;
+            }
+            
+            .back-arrow {
+                margin: 0;
+            }
+
+            .mentor-section {
+                padding: 15px 20px;
+            }
+
+            .mentor-section span {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка назад -->
+    <button class="back-button" onclick="goBack()">
+        <span class="back-arrow">←</span>
+        <span>Назад</span>
+    </button>
+
+    <div class="container">
+        <!--Поля-->
+        <div class="time-status">
+            <div class="status-icons">
+            </div>
+        </div>
+
+        <!-- Заголовок -->
+        <h1 class="page-title">ПРАКТИКА</h1>
+
+
+        <div class="tests-grid">
+            <a href="Base.html">
+            <div class="test-card">
+                <h3>📊 Тест ЕГЭ (база)</h3>
+                <p><span class="test-icon">📝</span> Базовый уровень</p>
+            </div>
+            </a>
+
+            <a href="profile.html">
+            <div class="test-card">
+                <h3>📈 Тест ЕГЭ (профиль)</h3>
+                <p><span class="test-icon">🎯</span> Профильный уровень</p>
+            </div>
+            </a>
+        
+
+        <div class="cards-grid">
+            <a href="question.html">
+                <div class="card">
+                <h2>🎲Случайный вопрос</h2>
+                <p>Выбрать правильный номер</p>
+            </a>
+            </div>
+        </div>
+
+
+
+    <script>
+        // Функция для кнопки назад
+        function goBack() {
+            if (document.referrer) {
+                history.back();
+            } else {
+                alert('Нет предыдущей страницы');
+            }
+        }
+
+        // Интерактивность для всех кликабельных элементов
+        document.querySelectorAll('.mentor-section, .test-card, .practice-card, .small-card, .calculator-card').forEach(el => {
+            el.addEventListener('click', function() {
+                // Эффект нажатия
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 100);
+                
+                // Логируем клик
+                const title = this.querySelector('h2, h3, span')?.textContent || 'элемент';
+                console.log(`Переход: ${title}`);
+            });
+        });
+
+        // Поддержка клавиши ESC для возврата
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест ЕГЭ (база) — все задания</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #7c8cd1 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+        }
+
+
+        /* Кнопка назад */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        .back-arrow {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px 30px;
+        }
+
+        /* Заголовок */
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .test-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .test-level {
+            display: inline-block;
+            background: #e6edf7;
+            color: #000000;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 8px 30px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+        }
+
+        /* Прогресс-бар */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4f46e5, #818cf8);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Навигация по заданиям (кнопки 1–20) */
+        .tasks-nav {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            margin-bottom: 30px;
+        }
+
+        .nav-title {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+        }
+
+        .nav-item {
+            aspect-ratio: 1;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            border-color: #4f46e5;
+            background: #eef2ff;
+        }
+
+        .nav-item.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+        .nav-item.completed {
+            background: #dcfce7;
+            border-color: #594dff;
+            color: #0b209b;
+        }
+
+        /* Карточка задания */
+        .test-section {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            margin-bottom: 30px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .question-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .question-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #1a2634;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .answers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .answer-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .answer-item:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .answer-item.selected {
+            background: #eef2ff;
+            border-color: #4f46e5;
+        }
+
+        .answer-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .answer-item.selected .answer-checkbox {
+            background: #4f46e5;
+            border-color: #4f46e5;
+        }
+
+        .answer-item.selected .answer-checkbox::after {
+            content: "✓";
+        }
+
+        .answer-text {
+            font-size: 16px;
+            color: #1e293b;
+            flex: 1;
+        }
+
+        /* Панель управления (кнопки назад/далее, завершить) */
+        .test-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .test-button {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a2634;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .test-button:hover:not(:disabled) {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .test-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .test-button.primary {
+            background: #4f46e5;
+            color: white;
+            border: none;
+        }
+
+        .test-button.primary:hover:not(:disabled) {
+            background: #4338ca;
+        }
+
+        .test-button.success {
+            background: #0c115c;
+            color: white;
+            border: none;
+        }
+
+        .test-button.success:hover {
+            background: #4c14e7;
+        }
+
+        /* Статистика внизу */
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            border-radius: 16px;
+            padding: 15px 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a2634;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px; }
+            h1 { font-size: 36px; }
+            .nav-grid { grid-template-columns: repeat(5, 1fr); }
+            .test-footer { flex-direction: column; gap: 15px; }
+            .stats-row { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Стрелка назад -->
+    <button class="back-button" onclick="goBack()">
+        <span class="back-arrow">←</span>
+        <span>Назад</span>
+    </button>
+
+    <div class="container">
+        <!-- Шапка -->
+        <div class="test-header">
+            <div class="test-icon">📝</div>
+            <h1>Тест ЕГЭ</h1>
+            <div class="test-level">БАЗОВЫЙ УРОВЕНЬ</div>
+        </div>
+
+        <!-- Статистика выполнения -->
+        <div class="stats-row">
+            <div class="stat-item">
+                <span class="stat-label">Выполнено</span>
+                <span class="stat-value" id="completedStats">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Всего заданий</span>
+                <span class="stat-value">20</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Правильных</span>
+                <span class="stat-value" id="correctStats">0</span>
+            </div>
+        </div>
+
+        <!-- Прогресс-бар -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <!-- Навигация по заданиям (кнопки 1-20) -->
+        <div class="tasks-nav">
+            <div class="nav-title">
+                <span>Задания 1–20</span>
+                <span id="completedCount">0/20 выполнено</span>
+            </div>
+            <div class="nav-grid" id="taskNav"></div>
+        </div>
+
+        <!-- Текущее задание -->
+        <div class="test-section">
+            <div class="question-header">
+                <span class="question-number" id="taskNumber">Задание 1 из 20</span>
+            </div>
+            <div class="question-text" id="taskText">
+                Загрузка...
+            </div>
+            <div class="answers-list" id="answersList"></div>
+
+            <!-- Кнопки навигации -->
+            <div class="test-footer">
+                <div class="nav-buttons">
+                    <button class="test-button" id="prevBtn" disabled>← Назад</button>
+                    <button class="test-button" id="nextBtn">Далее →</button>
+                </div>
+                <button class="test-button success" id="finishBtn">Завершить тест</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ------------------------------------------------------------
+        // 20 заданий для базового уровня (каждое: текст, 4 варианта, номер правильного 0-3)
+        // ------------------------------------------------------------
+        const tasks = [
+            { text: "Найдите значение выражения: 24 + 36 : (12 – 6) × 2", answers: ["28", "36", "42", "56"], correct: 1 },
+            { text: "Площадь прямоугольника со сторонами 5 см и 8 см равна:", answers: ["26 см²", "40 см²", "13 см²", "30 см²"], correct: 1 },
+            { text: "Решите уравнение: 3x – 7 = 14", answers: ["5", "7", "8", "9"], correct: 1 },
+            { text: "Найдите 25% от 200", answers: ["25", "50", "75", "100"], correct: 1 },
+            { text: "Корень уравнения x/4 + 3 = 8 равен:", answers: ["20", "16", "24", "12"], correct: 0 },
+            { text: "Сколько градусов содержит угол, равный 1/3 развёрнутого угла?", answers: ["30°", "45°", "60°", "90°"], correct: 2 },
+            { text: "Среднее арифметическое чисел 12, 15, 18, 21 равно:", answers: ["15,5", "16", "16,5", "17"], correct: 2 },
+            { text: "Длина окружности радиуса 5 см (π≈3,14) равна:", answers: ["15,7 см", "31,4 см", "78,5 см", "25 см"], correct: 1 },
+            { text: "Упростите выражение: 5a + 3b – 2a + b", answers: ["3a + 4b", "7a + 4b", "3a + 2b", "7a + 2b"], correct: 0 },
+            { text: "Решите неравенство: 2x – 5 > 7", answers: ["x > 6", "x < 6", "x > 1", "x < 1"], correct: 0 },
+            { text: "Объём куба с ребром 4 см равен:", answers: ["64 см³", "16 см³", "24 см³", "32 см³"], correct: 0 },
+            { text: "Найдите значение выражения: 2³ + 3²", answers: ["13", "17", "15", "19"], correct: 1 },
+            { text: "Сколько процентов составляет число 15 от 60?", answers: ["20%", "25%", "30%", "35%"], correct: 1 },
+            { text: "Уравнение |x – 3| = 5 имеет корни:", answers: ["8 и –2", "8 и 2", "–8 и 2", "–8 и –2"], correct: 0 },
+            { text: "Площадь треугольника с основанием 10 см и высотой 6 см равна:", answers: ["30 см²", "60 см²", "16 см²", "40 см²"], correct: 0 },
+            { text: "Упростите: (a³)² : a⁴", answers: ["a²", "a³", "a⁵", "a⁶"], correct: 0 },
+            { text: "Решите систему: { x + y = 10,  x – y = 4 }", answers: ["x=7, y=3", "x=6, y=4", "x=8, y=2", "x=5, y=5"], correct: 0 },
+            { text: "Вероятность выпадения орла при броске монеты равна:", answers: ["0,25", "0,5", "0,75", "1"], correct: 1 },
+            { text: "Найдите sin 30° + cos 60°", answers: ["0,5", "1", "1,5", "2"], correct: 1 },
+            { text: "Решите уравнение: log₂ x = 4", answers: ["8", "16", "32", "64"], correct: 1 }
+        ];
+
+        // Состояние приложения
+        let currentTask = 0;                 // индекс текущего задания (0-19)
+        let answers = new Array(20).fill(null); // выбранные ответы (0-3 либо null)
+
+        // Элементы DOM
+        const taskNumberEl = document.getElementById('taskNumber');
+        const taskTextEl = document.getElementById('taskText');
+        const answersListEl = document.getElementById('answersList');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const finishBtn = document.getElementById('finishBtn');
+        const taskNav = document.getElementById('taskNav');
+        const completedCountEl = document.getElementById('completedCount');
+        const progressFill = document.getElementById('progressFill');
+        const completedStatsEl = document.getElementById('completedStats');
+        const correctStatsEl = document.getElementById('correctStats');
+
+        // Обновление всей статистики и навигации
+        function refreshUI() {
+            // Статистика
+            const completed = answers.filter(a => a !== null).length;
+            const correct = answers.reduce((acc, ans, idx) => acc + (ans === tasks[idx].correct ? 1 : 0), 0);
+            
+            completedStatsEl.textContent = completed;
+            correctStatsEl.textContent = correct;
+            completedCountEl.textContent = `${completed}/20 выполнено`;
+            progressFill.style.width = `${(completed / 20) * 100}%`;
+
+            // Перерисовка навигационных кнопок (1-20)
+            taskNav.innerHTML = '';
+            for (let i = 0; i < tasks.length; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'nav-item';
+                if (i === currentTask) btn.classList.add('active');
+                else if (answers[i] !== null) btn.classList.add('completed');
+                btn.textContent = i + 1;
+                btn.onclick = () => loadTask(i);
+                taskNav.appendChild(btn);
+            }
+
+            // Состояние кнопок назад/далее
+            prevBtn.disabled = currentTask === 0;
+            nextBtn.disabled = currentTask === tasks.length - 1;
+        }
+
+        // Загрузка задания по индексу
+        function loadTask(index) {
+            currentTask = index;
+            const task = tasks[index];
+
+            taskNumberEl.textContent = `Задание ${index + 1} из 20`;
+            taskTextEl.textContent = task.text;
+
+            // Создание вариантов ответов
+            answersListEl.innerHTML = '';
+            task.answers.forEach((ansText, ansIdx) => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'answer-item';
+                if (answers[index] === ansIdx) answerDiv.classList.add('selected');
+
+                answerDiv.innerHTML = `
+                    <div class="answer-checkbox"></div>
+                    <div class="answer-text">${ansText}</div>
+                `;
+
+                answerDiv.onclick = () => selectAnswer(index, ansIdx);
+                answersListEl.appendChild(answerDiv);
+            });
+
+            refreshUI();
+        }
+
+        // Выбор ответа
+        function selectAnswer(taskIdx, ansIdx) {
+            answers[taskIdx] = ansIdx;
+            loadTask(taskIdx); // перегрузим, чтобы показать выбранный вариант
+        }
+
+        // Кнопки навигации
+        prevBtn.onclick = () => {
+            if (currentTask > 0) loadTask(currentTask - 1);
+        };
+
+        nextBtn.onclick = () => {
+            if (currentTask < tasks.length - 1) loadTask(currentTask + 1);
+        };
+
+        // Завершение теста – показываем итог
+        finishBtn.onclick = () => {
+            const completed = answers.filter(a => a !== null).length;
+            const correct = answers.reduce((acc, ans, idx) => acc + (ans === tasks[idx].correct ? 1 : 0), 0);
+            
+            if (completed < 20) {
+                alert(`Вы выполнили ${completed} из 20 заданий. Хотите завершить досрочно?`, 'warning');
+            }
+            
+            alert(`✅ Тест завершён!\n\nВыполнено заданий: ${completed}/20\nПравильных ответов: ${correct}\nОценка: ${correct <= 6 ? '2' : correct <= 10 ? '3' : correct <= 15 ? '4' : '5'}`);
+        };
+
+        // Загружаем первое задание при старте
+        loadTask(0);
+
+        // Функция для кнопки назад
+        function goBack() {
+            if (document.referrer) {
+                history.back();
+            } else {
+                alert('Нет предыдущей страницы');
+                // window.location.href = '/'; // можно раскомментировать для перехода на главную
+            }
+        }
+        // Поддержка клавиши ESC для возврата
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+    </script>
+</body>
+</html>

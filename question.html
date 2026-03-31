@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Случайный вопрос</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #7c8cd1 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+        }
+
+        /* Кнопка назад */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        .back-arrow {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px 30px;
+        }
+
+        /* Заголовок */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Карточка с вопросом */
+        .question-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .random-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .question-text {
+            font-size: 24px;
+            line-height: 1.6;
+            color: #1a2634;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .question-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            color: #394a81;
+            font-size: 14px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Кнопка генерации */
+        .generate-button {
+            background: linear-gradient(135deg, #4862d6 0%, #b8bfdf 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .generate-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(184, 154, 255, 0.4);
+        }
+
+        /* Варианты ответов */
+        .answers-section {
+            margin-bottom: 30px;
+        }
+
+        .answers-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .answers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 20px;
+            background:#ffffff;
+            border-radius: 20px;
+            border: 1px solid #ffffff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .answer-item:hover {
+            background: rgb(238, 241, 255);
+            border-color: #394a81;
+            transform: translateX(5px);
+        }
+
+        .answer-item.selected {
+            background: #ffffff;
+            border-color: #394a81;
+        }
+
+        .answer-letter {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color:#1a2634;
+           
+        }
+
+        .answer-item.selected .answer-letter {
+            background: #394a81;
+            color: white;
+        }
+
+        .answer-text {
+            flex: 1;
+            font-size: 16px;
+            color: #1e293b;
+            text-align: left;
+        }
+
+        /* Панель действий */
+        .action-panel {
+            background: rgb(255, 255, 255);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 12px 95px;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn.secondary {
+            background: #f1f5f9;
+            color: #1a2634;
+        }
+
+        .action-btn.secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .number-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            padding: 5px 15px;
+            border-radius: 40px;
+        }
+
+        .number-selector select {
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Счетчик вопросов */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #394a81;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #000000;
+            font-size: 13px;
+        }
+
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+
+            .back-arrow {
+                top: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .question-text {
+                font-size: 20px;
+            }
+
+            .action-panel {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Анимация загрузки */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка назад -->
+    <button class="back-button" onclick="goBack()">
+        <span class="back-arrow">←</span>
+        <span>Назад</span>
+    </button>
+
+    <div class="container">
+        <!-- Заголовок -->
+        <div class="header">
+            <h1>СЛУЧАЙНЫЙ ВОПРОС</h1>
+            <div class="subtitle">Выбрать правильный номер</div>
+        </div>
+
+        <!-- Карточка с вопросом -->
+        <div class="question-card" id="questionCard">
+            <div class="random-icon">❓</div>
+            <div class="question-text" id="questionText">
+                Найдите значение выражения: 2sin²x + cos²x - 1
+            </div>
+            <div class="question-meta">
+                <span class="meta-item">📊 Номер 7</span>
+                <span class="meta-item">📐 Тригонометрия</span>
+                <span class="meta-item">⚡ Сложность: средняя</span>
+            </div>
+        </div>
+
+        <!-- Кнопка генерации -->
+        <button class="generate-button" onclick="generateQuestion()" id="generateBtn">
+            <span id="btnText">🎲 Сгенерировать новый вопрос</span>
+            <span id="btnLoader" class="loading" style="display: none;"></span>
+        </button>
+
+        <!-- Варианты ответов -->
+        <div class="answers-section">
+            <div class="answers-title">Выберите правильный ответ:</div>
+            <div class="answers-list" id="answersList">
+                <div class="answer-item" onclick="selectAnswer(this, 'A')">
+                    <div class="answer-letter">A</div>
+                    <div class="answer-text">1</div>
+                </div>
+                <div class="answer-item" onclick="selectAnswer(this, 'B')">
+                    <div class="answer-letter">B</div>
+                    <div class="answer-text">2</div>
+                </div>
+                <div class="answer-item" onclick="selectAnswer(this, 'C')">
+                    <div class="answer-letter">C</div>
+                    <div class="answer-text">-1</div>
+                </div>
+                <div class="answer-item" onclick="selectAnswer(this, 'D')">
+                    <div class="answer-letter">D</div>
+                    <div class="answer-text">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Панель действий -->
+        <div class="action-panel">
+            <div class="number-selector">
+                <span>🔢 Номер:</span>
+                <select id="questionNumber" onchange="changeNumber()">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7" selected>7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn secondary" onclick="checkAnswer()">
+                    <span>✓</span> Проверить
+                </button>
+            </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="stats-section">
+            <div class="stat-box">
+                <div class="stat-value" id="correctCount">12</div>
+                <div class="stat-label">Правильных ответов</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalCount">25</div>
+                <div class="stat-label">Всего попыток</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="percentCorrect">48%</div>
+                <div class="stat-label">Успешность</div>
+            </div>
+        </div>
+
+    <script>
+        // База вопросов
+        const questions = {
+            1: {
+                text: "Найдите значение выражения: 2 + 2 × 2",
+                answers: ["4", "6", "8", "2"],
+                correct: 1,
+                topic: "Арифметика",
+                difficulty: "легкая"
+            },
+            2: {
+                text: "Решите уравнение: x² - 5x + 6 = 0",
+                answers: ["x = 2; x = 3", "x = -2; x = -3", "x = 1; x = 6", "x = -1; x = -6"],
+                correct: 0,
+                topic: "Алгебра",
+                difficulty: "средняя"
+            },
+            3: {
+                text: "Чему равна площадь круга с радиусом 3?",
+                answers: ["9π", "6π", "3π", "12π"],
+                correct: 0,
+                topic: "Геометрия",
+                difficulty: "средняя"
+            },
+            4: {
+                text: "Найдите производную функции f(x) = x³",
+                answers: ["3x²", "x²", "3x", "x⁴"],
+                correct: 0,
+                topic: "Матанализ",
+                difficulty: "средняя"
+            },
+            5: {
+                text: "Чему равен sin 30°?",
+                answers: ["1/2", "√3/2", "1", "0"],
+                correct: 0,
+                topic: "Тригонометрия",
+                difficulty: "легкая"
+            },
+            6: {
+                text: "Сколько граней у куба?",
+                answers: ["6", "8", "12", "4"],
+                correct: 0,
+                topic: "Геометрия",
+                difficulty: "легкая"
+            },
+            7: {
+                text: "Найдите значение выражения: 2sin²x + cos²x - 1",
+                answers: ["1", "2", "-1", "0"],
+                correct: 3,
+                topic: "Тригонометрия",
+                difficulty: "средняя"
+            },
+            8: {
+                text: "Чему равен логарифм 100 по основанию 10?",
+                answers: ["2", "10", "1", "100"],
+                correct: 0,
+                topic: "Алгебра",
+                difficulty: "легкая"
+            },
+            9: {
+                text: "Найдите площадь треугольника со сторонами 3, 4, 5",
+                answers: ["6", "12", "24", "10"],
+                correct: 0,
+                topic: "Геометрия",
+                difficulty: "средняя"
+            },
+            10: {
+                text: "Производная sin x равна:",
+                answers: ["cos x", "-cos x", "sin x", "-sin x"],
+                correct: 0,
+                topic: "Матанализ",
+                difficulty: "легкая"
+            },
+            11: {
+                text: "Сколько будет 15% от 200?",
+                answers: ["30", "20", "15", "40"],
+                correct: 0,
+                topic: "Арифметика",
+                difficulty: "легкая"
+            },
+            12: {
+                text: "Решите неравенство: x² < 9",
+                answers: ["-3 < x < 3", "x < 3", "x > -3", "x < -3 или x > 3"],
+                correct: 0,
+                topic: "Алгебра",
+                difficulty: "средняя"
+            },
+            13: {
+                text: "Чему равна сумма углов треугольника?",
+                answers: ["180°", "360°", "90°", "270°"],
+                correct: 0,
+                topic: "Геометрия",
+                difficulty: "легкая"
+            },
+            14: {
+                text: "Найдите значение выражения: log₂ 8",
+                answers: ["3", "2", "4", "1"],
+                correct: 0,
+                topic: "Алгебра",
+                difficulty: "легкая"
+            },
+            15: {
+                text: "Сколько диагоналей у прямоугольника?",
+                answers: ["2", "4", "1", "0"],
+                correct: 0,
+                topic: "Геометрия",
+                difficulty: "легкая"
+            },
+            16: {
+                text: "Производная e^x равна:",
+                answers: ["e^x", "x·e^x", "1", "ln x"],
+                correct: 0,
+                topic: "Матанализ",
+                difficulty: "легкая"
+            },
+            17: {
+                text: "Чему равен cos 60°?",
+                answers: ["1/2", "√3/2", "1", "0"],
+                correct: 0,
+                topic: "Тригонометрия",
+                difficulty: "легкая"
+            },
+            18: {
+                text: "Решите уравнение: 2x + 5 = 15",
+                answers: ["5", "10", "7.5", "20"],
+                correct: 0,
+                topic: "Алгебра",
+                difficulty: "легкая"
+            },
+            19: {
+                text: "Найдите объем куба со стороной 3",
+                answers: ["27", "9", "18", "36"],
+                correct: 0,
+                topic: "Геометрия",
+                difficulty: "средняя"
+            }
+        };
+
+        let currentQuestion = 7;
+        let selectedAnswer = null;
+        let correctCount = 12;
+        let totalAttempts = 25;
+
+        // Загрузка вопроса
+        function loadQuestion(number) {
+            const q = questions[number];
+            if (!q) return;
+
+            document.getElementById('questionText').textContent = q.text;
+            
+            // Обновляем мета-информацию
+            const metaHtml = `
+                <span class="meta-item">📊 Номер ${number}</span>
+                <span class="meta-item">📐 ${q.topic}</span>
+                <span class="meta-item">⚡ Сложность: ${q.difficulty}</span>
+            `;
+            document.querySelector('.question-meta').innerHTML = metaHtml;
+
+            // Обновляем варианты ответов
+            const answersList = document.getElementById('answersList');
+            answersList.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            
+            q.answers.forEach((answer, index) => {
+                const answerItem = document.createElement('div');
+                answerItem.className = 'answer-item';
+                answerItem.onclick = () => selectAnswer(answerItem, letters[index]);
+                answerItem.innerHTML = `
+                    <div class="answer-letter">${letters[index]}</div>
+                    <div class="answer-text">${answer}</div>
+                `;
+                answersList.appendChild(answerItem);
+            });
+
+            // Сбрасываем выбранный ответ
+            selectedAnswer = null;
+        }
+
+        // Генерация случайного вопроса
+        function generateQuestion() {
+            const btn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            
+            // Показываем загрузку
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline-block';
+            btn.disabled = true;
+
+            // Имитация загрузки
+            setTimeout(() => {
+                const randomNum = Math.floor(Math.random() * 19) + 1;
+                document.getElementById('questionNumber').value = randomNum;
+                currentQuestion = randomNum;
+                loadQuestion(randomNum);
+                
+                // Возвращаем кнопку в обычное состояние
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+                btn.disabled = false;
+            }, 500);
+        }
+
+        // Выбор ответа
+        function selectAnswer(element, letter) {
+            document.querySelectorAll('.answer-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedAnswer = letter;
+        }
+
+        // Проверка ответа
+        function checkAnswer() {
+            if (!selectedAnswer) {
+                alert('Пожалуйста, выберите ответ');
+                return;
+            }
+
+            const correct = questions[currentQuestion].correct;
+            const letters = ['A', 'B', 'C', 'D'];
+            const isCorrect = letters[correct] === selectedAnswer;
+
+            totalAttempts++;
+            if (isCorrect) {
+                correctCount++;
+                alert('✅ Правильно! Молодец!');
+            } else {
+                alert('❌ Неправильно. Попробуй еще раз');
+            }
+
+            // Обновляем статистику
+            updateStats();
+        }
+
+        // Обновление статистики
+        function updateStats() {
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('totalCount').textContent = totalAttempts;
+            const percent = Math.round((correctCount / totalAttempts) * 100);
+            document.getElementById('percentCorrect').textContent = percent + '%';
+        }
+
+        // Смена номера вопроса
+        function changeNumber() {
+            const number = parseInt(document.getElementById('questionNumber').value);
+            currentQuestion = number;
+            loadQuestion(number);
+        }
+
+
+        // Инициализация
+        window.onload = function() {
+            loadQuestion(7);
+            updateStats();
+        };
+
+        // Функция для кнопки назад
+        function goBack() {
+            if (document.referrer) {
+                history.back();
+            } else {
+                alert('Нет предыдущей страницы');
+                // window.location.href = '/'; // можно раскомментировать для перехода на главную
+            }
+        }        
+
+        // Поддержка клавиши ESC для возврата
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+
+    </script>
+</body>
+</html>

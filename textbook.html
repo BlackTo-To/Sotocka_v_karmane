@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учебник</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+           background: linear-gradient(135deg, #7c8cd1 0%, #ffffff 100%);
+           min-height: 100vh;
+           padding: 30px;
+           position: relative;
+        }
+
+        /* Стрелка назад */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        .back-arrow {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px 30px;
+        }
+
+        /* Заголовок */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 56px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* Поиск */
+        .search-section {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 8px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .search-icon {
+            padding: 0 20px;
+            font-size: 20px;
+            color: #667eea;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 18px 0;
+            font-size: 16px;
+            outline: none;
+            color: #1a2634;
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 5px;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+        }
+
+        /* Категории */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+
+        .category {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-weight: 500;
+        }
+
+        .category:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .category.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        /* Сетка разделов */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        /* Карточка раздела */
+        .section-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+            background: white;
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a2634;
+            margin-bottom: 12px;
+        }
+
+        .card-description {
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .topics-count {
+            background: #f1f5f9;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 13px;
+            color: #1a2634;
+        }
+
+        .arrow-link {
+            color: #667eea;
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+
+        .section-card:hover .arrow-link {
+            transform: translateX(5px);
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 40px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 35px;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a2634;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-close {
+            background: #f1f5f9;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #e2e8f0;
+            transform: scale(1.05);
+        }
+
+        /* Теория */
+        .theory-block {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .theory-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a2634;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theory-text {
+            color: #334155;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .formula {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 18px;
+            text-align: center;
+            margin: 12px 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Задания */
+        .tasks-block {
+            margin-top: 25px;
+        }
+
+        .tasks-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a2634;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-item {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .task-item:hover {
+            border-color: #667eea;
+            background: white;
+        }
+
+        .task-question {
+            font-weight: 600;
+            color: #1a2634;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .task-answers {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .task-answer {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .task-answer:hover {
+            border-color: #667eea;
+            background: #f1f5f9;
+        }
+
+        .task-answer.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .task-answer.correct {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .task-answer.wrong {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .task-check-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .task-check-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .task-feedback {
+            margin-top: 12px;
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .task-feedback.correct {
+            background: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+
+        .task-feedback.wrong {
+            background: #fee2e2;
+            color: #991b1b;
+            display: block;
+        }
+
+        /* Популярные темы */
+        .popular-section {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .popular-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a2634;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tag {
+            background: #f1f5f9;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tag:hover {
+            background: #e6edf7;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .tag.highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+        }
+
+        /* Футер */
+        .footer {
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            padding: 40px 0 10px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 40px;
+        }
+
+        .footer .site {
+            font-weight: 600;
+            margin-top: 8px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .back-arrow {
+                top: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .search-section {
+                flex-direction: column;
+                border-radius: 30px;
+            }
+
+            .search-button {
+                width: 100%;
+                margin: 5px;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .task-answers {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка назад -->
+    <button class="back-button" onclick="goBack()">
+        <span class="back-arrow">←</span>
+        <span>Назад</span>
+    </button>
+
+    <div class="container">
+        <!-- Заголовок -->
+        <div class="header">
+            <h1>УЧЕБНИК</h1>
+        </div>
+
+        <!-- Поиск -->
+        <div class="search-section">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Поиск по теории...">
+            <button class="search-button" onclick="searchTheory()">Найти</button>
+        </div>
+
+        <!-- Категории -->
+        <div class="categories">
+            <span class="category active" onclick="filterCategory('all', this)">Все разделы</span>
+            <span class="category" onclick="filterCategory('algebra', this)">Алгебра</span>
+            <span class="category" onclick="filterCategory('geometry', this)">Геометрия</span>
+            <span class="category" onclick="filterCategory('trigonometry', this)">Тригонометрия</span>
+            <span class="category" onclick="filterCategory('calculus', this)">Мат. анализ</span>
+            <span class="category" onclick="filterCategory('probability', this)">Вероятность</span>
+        </div>
+
+        <!-- Сетка разделов -->
+        <div class="sections-grid" id="sectionsGrid">
+            <!-- Алгебра -->
+            <div class="section-card" data-category="algebra" onclick="openSection('algebra')">
+                <div class="card-icon">📊</div>
+                <div class="card-title">Алгебра</div>
+                <div class="card-description">
+                    Уравнения, неравенства, системы, прогрессии, логарифмы, степени и корни
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">15 тем • 45 заданий</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+
+            <!-- Планиметрия -->
+            <div class="section-card" data-category="geometry" onclick="openSection('planimetry')">
+                <div class="card-icon">📐</div>
+                <div class="card-title">Планиметрия</div>
+                <div class="card-description">
+                    Треугольники, четырехугольники, окружность, площади, теоремы
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">12 тем • 38 заданий</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+
+            <!-- Стереометрия -->
+            <div class="section-card" data-category="geometry" onclick="openSection('stereometry')">
+                <div class="card-icon">🧊</div>
+                <div class="card-title">Стереометрия</div>
+                <div class="card-description">
+                    Призмы, пирамиды, цилиндры, конусы, шары, объемы и площади
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">10 тем • 32 задания</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+
+            <!-- Тригонометрия -->
+            <div class="section-card" data-category="trigonometry" onclick="openSection('trigonometry')">
+                <div class="card-icon">🔄</div>
+                <div class="card-title">Тригонометрия</div>
+                <div class="card-description">
+                    Основные формулы, уравнения, преобразования, графики функций
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">8 тем • 28 заданий</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+
+            <!-- Математический анализ -->
+            <div class="section-card" data-category="calculus" onclick="openSection('calculus')">
+                <div class="card-icon">📈</div>
+                <div class="card-title">Математический анализ</div>
+                <div class="card-description">
+                    Производная, первообразная, интегралы, исследование функций
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">7 тем • 35 заданий</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+
+            <!-- Теория вероятностей -->
+            <div class="section-card" data-category="probability" onclick="openSection('probability')">
+                <div class="card-icon">🎲</div>
+                <div class="card-title">Теория вероятностей</div>
+                <div class="card-description">
+                    События, вероятности, комбинаторика, статистика
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">6 тем • 25 заданий</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+
+            <!-- Текстовые задачи -->
+            <div class="section-card" data-category="algebra" onclick="openSection('text_tasks')">
+                <div class="card-icon">📝</div>
+                <div class="card-title">Текстовые задачи</div>
+                <div class="card-description">
+                    Движение, работа, проценты, смеси, экономические задачи
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">9 тем • 42 задания</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+
+            <!-- Задачи с параметром -->
+            <div class="section-card" data-category="algebra" onclick="openSection('parameters')">
+                <div class="card-icon">⚙️</div>
+                <div class="card-title">Задачи с параметром</div>
+                <div class="card-description">
+                    Аналитические и графические методы решения
+                </div>
+                <div class="card-footer">
+                    <span class="topics-count">5 тем • 22 задания</span>
+                    <span class="arrow-link">→</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">
+                    <span id="modalIcon">📊</span>
+                    <span id="modalTitleText">Алгебра</span>
+                </div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Данные разделов с теорией и заданиями
+        const sectionsData = {
+            algebra: {
+                title: "Алгебра",
+                icon: "📊",
+                theory: [
+                    { title: "Квадратные уравнения", text: "Уравнение вида ax² + bx + c = 0. Дискриминант: D = b² - 4ac. Корни: x = (-b ± √D) / 2a", formula: "D = b² - 4ac" },
+                    { title: "Логарифмы", text: "Логарифм числа b по основанию a: logₐb = c, если aᶜ = b. Основные свойства: logₐ(xy) = logₐx + logₐy", formula: "logₐ(x·y) = logₐx + logₐy" },
+                    { title: "Степени", text: "aⁿ = a · a · ... · a (n раз). Свойства: aᵐ·aⁿ = aᵐ⁺ⁿ, (aᵐ)ⁿ = aᵐⁿ", formula: "aᵐ·aⁿ = aᵐ⁺ⁿ" }
+                ],
+                tasks: [
+                    { question: "Решите уравнение: x² - 5x + 6 = 0", answers: ["x = 2; x = 3", "x = -2; x = -3", "x = 1; x = 6", "x = -1; x = -6"], correct: 0 },
+                    { question: "Найдите значение выражения: log₂ 8", answers: ["2", "3", "4", "1"], correct: 1 },
+                    { question: "Вычислите: 2³·2⁴", answers: ["2⁷", "2¹²", "4⁷", "8⁷"], correct: 0 }
+                ]
+            },
+            planimetry: {
+                title: "Планиметрия",
+                icon: "📐",
+                theory: [
+                    { title: "Теорема Пифагора", text: "В прямоугольном треугольнике квадрат гипотенузы равен сумме квадратов катетов.", formula: "c² = a² + b²" },
+                    { title: "Площадь треугольника", text: "Площадь треугольника равна половине произведения основания на высоту.", formula: "S = ½·a·h" },
+                    { title: "Площадь круга", text: "Площадь круга равна произведению числа π на квадрат радиуса.", formula: "S = πR²" }
+                ],
+                tasks: [
+                    { question: "В прямоугольном треугольнике катеты равны 3 и 4. Найдите гипотенузу.", answers: ["5", "6", "7", "8"], correct: 0 },
+                    { question: "Площадь треугольника с основанием 10 и высотой 6 равна:", answers: ["30", "60", "15", "20"], correct: 0 },
+                    { question: "Радиус круга равен 5. Найдите его площадь (π = 3.14)", answers: ["78.5", "31.4", "15.7", "62.8"], correct: 0 }
+                ]
+            },
+            stereometry: {
+                title: "Стереометрия",
+                icon: "🧊",
+                theory: [
+                    { title: "Объем куба", text: "Объем куба равен кубу его стороны.", formula: "V = a³" },
+                    { title: "Объем цилиндра", text: "Объем цилиндра равен произведению площади основания на высоту.", formula: "V = πR²·h" },
+                    { title: "Объем шара", text: "Объем шара равен 4/3 произведения числа π на куб радиуса.", formula: "V = ⁴⁄₃·πR³" }
+                ],
+                tasks: [
+                    { question: "Найдите объем куба со стороной 3.", answers: ["27", "9", "18", "36"], correct: 0 },
+                    { question: "Радиус цилиндра 2, высота 5. Найдите объем (π = 3.14)", answers: ["62.8", "31.4", "125.6", "15.7"], correct: 0 },
+                    { question: "Радиус шара 3. Найдите его объем (π = 3.14)", answers: ["113.04", "36", "12.56", "28.26"], correct: 0 }
+                ]
+            },
+            trigonometry: {
+                title: "Тригонометрия",
+                icon: "🔄",
+                theory: [
+                    { title: "Основное тригонометрическое тождество", text: "Сумма квадратов синуса и косинуса угла равна 1.", formula: "sin²α + cos²α = 1" },
+                    { title: "Синус двойного угла", text: "Синус двойного угла равен удвоенному произведению синуса на косинус.", formula: "sin 2α = 2·sinα·cosα" },
+                    { title: "Значения тригонометрических функций", text: "sin 30° = 1/2, cos 60° = 1/2, sin 90° = 1", formula: "sin 30° = ½" }
+                ],
+                tasks: [
+                    { question: "sin²30° + cos²30° = ?", answers: ["0", "1", "½", "2"], correct: 1 },
+                    { question: "sin 90° равен:", answers: ["0", "1", "-1", "½"], correct: 1 },
+                    { question: "cos 60° равен:", answers: ["0", "1", "½", "√3/2"], correct: 2 }
+                ]
+            },
+            calculus: {
+                title: "Математический анализ",
+                icon: "📈",
+                theory: [
+                    { title: "Производная", text: "Производная функции показывает скорость ее изменения.", formula: "f'(x) = lim(h→0) (f(x+h)-f(x))/h" },
+                    { title: "Производная степенной функции", text: "Производная xⁿ равна n·xⁿ⁻¹.", formula: "(xⁿ)' = n·xⁿ⁻¹" },
+                    { title: "Первообразная", text: "Функция F(x) называется первообразной для f(x), если F'(x) = f(x).", formula: "∫f(x)dx = F(x) + C" }
+                ],
+                tasks: [
+                    { question: "Найдите производную функции f(x) = x³", answers: ["3x²", "x²", "3x", "x⁴"], correct: 0 },
+                    { question: "Найдите производную функции f(x) = x⁵", answers: ["5x⁴", "x⁴", "5x⁵", "4x⁴"], correct: 0 },
+                    { question: "Найдите производную функции f(x) = 2x²", answers: ["4x", "2x", "x", "4x²"], correct: 0 }
+                ]
+            },
+            probability: {
+                title: "Теория вероятностей",
+                icon: "🎲",
+                theory: [
+                    { title: "Классическая вероятность", text: "Вероятность события равна отношению благоприятных исходов к общему числу исходов.", formula: "P(A) = m/n" },
+                    { title: "Сложение вероятностей", text: "Для несовместных событий: P(A∪B) = P(A) + P(B)", formula: "P(A+B) = P(A) + P(B)" },
+                    { title: "Умножение вероятностей", text: "Для независимых событий: P(A·B) = P(A)·P(B)", formula: "P(A·B) = P(A)·P(B)" }
+                ],
+                tasks: [
+                    { question: "При бросании кубика вероятность выпадения четного числа равна:", answers: ["1/2", "1/3", "1/6", "2/3"], correct: 0 },
+                    { question: "Вероятность выпадения орла при подбрасывании монеты:", answers: ["1/2", "1/3", "1/4", "1"], correct: 0 },
+                    { question: "В корзине 5 красных и 3 синих шара. Вероятность вытащить красный шар:", answers: ["5/8", "3/8", "1/2", "5/3"], correct: 0 }
+                ]
+            },
+            text_tasks: {
+                title: "Текстовые задачи",
+                icon: "📝",
+                theory: [
+                    { title: "Задачи на движение", text: "Скорость = Расстояние / Время. v = S / t", formula: "S = v·t" },
+                    { title: "Задачи на работу", text: "Производительность = Работа / Время. P = A / t", formula: "A = P·t" },
+                    { title: "Задачи на проценты", text: "Чтобы найти процент от числа, нужно число умножить на процент и разделить на 100.", formula: "n% от A = A·n/100" }
+                ],
+                tasks: [
+                    { question: "Поезд едет со скоростью 60 км/ч. Какое расстояние он проедет за 3 часа?", answers: ["180 км", "120 км", "60 км", "200 км"], correct: 0 },
+                    { question: "Рабочий делает 10 деталей в час. Сколько деталей он сделает за 8 часов?", answers: ["80", "100", "60", "40"], correct: 0 },
+                    { question: "20% от числа 150 равно:", answers: ["30", "20", "25", "35"], correct: 0 }
+                ]
+            },
+            parameters: {
+                title: "Задачи с параметром",
+                icon: "⚙️",
+                theory: [
+                    { title: "Линейные уравнения с параметром", text: "ax = b. Если a ≠ 0, то x = b/a. Если a = 0, b = 0, то x - любое. Если a = 0, b ≠ 0, то решений нет.", formula: "ax = b" },
+                    { title: "Квадратные уравнения с параметром", text: "Необходимо рассматривать дискриминант и коэффициент при старшей степени.", formula: "ax² + bx + c = 0" },
+                    { title: "Графический метод", text: "Построение графиков и анализ их взаимного расположения.", formula: "y = f(x, a)" }
+                ],
+                tasks: [
+                    { question: "При каком значении a уравнение ax = 5 не имеет решений?", answers: ["a = 0", "a = 1", "a = 5", "a = -1"], correct: 0 },
+                    { question: "При каком значении a уравнение a·x = 0 имеет бесконечно много решений?", answers: ["a = 0", "a = 1", "a = 2", "a = -1"], correct: 0 },
+                    { question: "Решите уравнение (a-1)x = 2 при a = 3", answers: ["1", "2", "0", "нет решений"], correct: 0 }
+                ]
+            }
+        };
+
+        let currentTaskSelections = {};
+
+        function openSection(sectionId) {
+            const section = sectionsData[sectionId];
+            if (!section) return;
+
+            const modal = document.getElementById('modal');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalTitleText = document.getElementById('modalTitleText');
+            const modalBody = document.getElementById('modalBody');
+
+            modalIcon.textContent = section.icon;
+            modalTitleText.textContent = section.title;
+
+            currentTaskSelections = {};
+
+            let theoryHtml = '<div class="theory-block"><div class="theory-title">📖 Теория</div>';
+            section.theory.forEach((item, idx) => {
+                theoryHtml += `
+                    <div style="margin-bottom: 20px;">
+                        <div class="theory-title">${item.title}</div>
+                        <div class="theory-text">${item.text}</div>
+                        <div class="formula">${item.formula}</div>
+                    </div>
+                `;
+            });
+            theoryHtml += '</div>';
+
+            let tasksHtml = '<div class="tasks-block"><div class="tasks-title">✍️ Практические задания</div>';
+            section.tasks.forEach((task, idx) => {
+                tasksHtml += `
+                    <div class="task-item" id="task-${idx}">
+                        <div class="task-question">${idx + 1}. ${task.question}</div>
+                        <div class="task-answers" id="answers-${idx}">
+                            ${task.answers.map((ans, ansIdx) => `
+                                <div class="task-answer" onclick="selectAnswer(${idx}, ${ansIdx})">${ans}</div>
+                            `).join('')}
+                        </div>
+                        <button class="task-check-btn" onclick="checkAnswer(${idx}, ${task.correct})">Проверить</button>
+                        <div class="task-feedback" id="feedback-${idx}"></div>
+                    </div>
+                `;
+            });
+            tasksHtml += '</div>';
+
+            modalBody.innerHTML = theoryHtml + tasksHtml;
+            modal.classList.add('active');
+        }
+
+        function selectAnswer(taskId, answerIdx) {
+            const answersDiv = document.getElementById(`answers-${taskId}`);
+            const allAnswers = answersDiv.querySelectorAll('.task-answer');
+            
+            allAnswers.forEach(ans => {
+                ans.classList.remove('selected');
+            });
+            
+            allAnswers[answerIdx].classList.add('selected');
+            currentTaskSelections[taskId] = answerIdx;
+        }
+
+        function checkAnswer(taskId, correctIdx) {
+            const selected = currentTaskSelections[taskId];
+            const feedbackDiv = document.getElementById(`feedback-${taskId}`);
+            const answersDiv = document.getElementById(`answers-${taskId}`);
+            const allAnswers = answersDiv.querySelectorAll('.task-answer');
+            
+            if (selected === undefined) {
+                feedbackDiv.textContent = 'Пожалуйста, выберите ответ';
+                feedbackDiv.className = 'task-feedback wrong';
+                return;
+            }
+            
+            if (selected === correctIdx) {
+                feedbackDiv.textContent = '✅ Правильно! Отличная работа!';
+                feedbackDiv.className = 'task-feedback correct';
+                allAnswers[selected].classList.add('correct');
+            } else {
+                const correctAnswerText = allAnswers[correctIdx].textContent;
+                feedbackDiv.textContent = `❌ Неправильно. Правильный ответ: ${correctAnswerText}`;
+                feedbackDiv.className = 'task-feedback wrong';
+                allAnswers[selected].classList.add('wrong');
+                allAnswers[correctIdx].classList.add('correct');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function searchTheory() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                alert(`🔍 Поиск по теории: "${query}"\n\nНайдено материалов: 8\nРекомендуем: Алгебра, Квадратные уравнения, Тригонометрия`);
+            } else {
+                alert('Введите поисковый запрос');
+            }
+        }
+
+        function filterCategory(category, element) {
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            const cards = document.querySelectorAll('.section-card');
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else if (card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function openTopic(topic) {
+            const topicNames = {
+                'square-equations': 'Квадратные уравнения',
+                'pythagoras': 'Теорема Пифагора',
+                'derivative': 'Производная',
+                'logarithms': 'Логарифмы',
+                'trigonometry': 'Тригонометрия',
+                'probability': 'Теория вероятностей',
+                'area': 'Площади фигур',
+                'inequalities': 'Неравенства',
+                'motion': 'Задачи на движение',
+                'percent': 'Проценты'
+            };
+            alert(`📘 Тема "${topicNames[topic] || topic}"\n\nТеория и задания доступны в соответствующем разделе учебника.`);
+        }
+
+        document.querySelector('.back-arrow').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (document.referrer) {
+                history.back();
+            } else {
+                window.location.href = '/';
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTheory();
+            }
+        });
+
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        // Функция для кнопки назад        
+                function goBack() {
+            if (document.referrer) {
+                history.back();
+            } else {
+                alert('Нет предыдущей страницы');
+                // window.location.href = '/'; // можно раскомментировать для перехода на главную
+            }
+        }
+    </script>
+</body>
+</html>

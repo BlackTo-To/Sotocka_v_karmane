@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест ЕГЭ (профиль)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #7c8cd1 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+        }
+
+        /* Кнопка назад */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+
+        .back-arrow {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+         /* Основной контент */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px 30px;
+        }
+
+        /* Заголовок */
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .test-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .test-level {
+            display: inline-block;
+            background: #fee2e2;
+            color: #000000;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 8px 30px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+        }
+
+        /* Статистика */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Навигация по заданиям */
+        .tasks-nav {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            margin-bottom: 30px;
+        }
+
+        .nav-title {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .nav-item {
+            padding: 12px 5px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            border-color: #dc2626;
+            background: #fee2e2;
+        }
+
+        .nav-item.active {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+
+        .nav-item.active .nav-number,
+        .nav-item.active .nav-balls {
+            color: white;
+        }
+
+        .nav-item.completed {
+            background: #dcfce7;
+            border-color: #22c55e;
+        }
+
+        .nav-number {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a2634;
+        }
+
+        .nav-balls {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        /* Прогресс-бар */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Карточка задания */
+        .test-section {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            margin-bottom: 30px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .question-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #dc2626;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 20px;
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #1a2634;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .answers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .answer-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .answer-item:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .answer-item.selected {
+            background: #fee2e2;
+            border-color: #dc2626;
+        }
+
+        .answer-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .answer-item.selected .answer-checkbox {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .answer-item.selected .answer-checkbox::after {
+            content: "✓";
+        }
+
+        .answer-text {
+            font-size: 16px;
+            color: #1e293b;
+            flex: 1;
+        }
+
+        .test-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .test-button {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a2634;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .test-button:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .test-button.primary {
+            background: #dc2626;
+            color: white;
+            border: none;
+        }
+
+        .test-button.primary:hover {
+            background: #b91c1c;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px; }
+            h1 { font-size: 36px; }
+            .stats-section { grid-template-columns: repeat(2, 1fr); }
+            .test-footer { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <!--Кнопка назад-->
+    <button class="back-button" onclick="goBack()">
+        <span class="back-arrow">←</span>
+        <span>Назад</span>
+    </button>
+
+    <div class="container">
+        <div class="test-header">
+            <div class="test-icon">📊</div>
+            <h1>Тест ЕГЭ</h1>
+            <div class="test-level">ПРОФИЛЬНЫЙ УРОВЕНЬ</div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-value" id="completedStats">0</div>
+                <div class="stat-label">выполнено</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pointsStats">0</div>
+                <div class="stat-label">баллов</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">19</div>
+                <div class="stat-label">заданий</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">32</div>
+                <div class="stat-label">макс. балл</div>
+            </div>
+        </div>
+
+        <!-- Прогресс -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+
+        <!-- Навигация по заданиям -->
+        <div class="tasks-nav">
+            <div class="nav-title">
+                <span>Задания 1-19</span>
+                <span id="completedCount">0/19 выполнено, 0 баллов</span>
+            </div>
+            <div class="nav-grid" id="taskNav"></div>
+        </div>
+
+        <!-- Текущее задание -->
+        <div class="test-section" id="currentTask">
+            <div class="question-header">
+                <span class="question-number" id="taskNumber">Задание 1 из 19</span>
+            </div>
+            <div class="question-meta" id="taskMeta"></div>
+            <div class="question-text" id="taskText"></div>
+            <div class="answers-list" id="answersList"></div>
+            <div class="test-footer">
+                <div class="nav-buttons">
+                    <button class="test-button" id="prevBtn" disabled>← Назад</button>
+                    <button class="test-button" id="nextBtn">Далее →</button>
+                </div>
+                <button class="test-button primary" id="checkBtn">Проверить</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // База данных профильных заданий
+        const tasks = [
+            { text: "а) Решите уравнение: 2sin²x + sin x - 1 = 0\nб) Найдите все корни, принадлежащие [-π/2; π/2]", answers: ["x = π/6 + 2πn, x = 5π/6 + 2πn", "x = π/6 + 2πn, x = -π/2 + 2πn", "x = π/6 + 2πn, x = π/2 + 2πn", "x = π/3 + 2πn, x = 2π/3 + 2πn"], correct: 0, balls: 2, topic: "Уравнения", difficulty: "Высокая" },
+            { text: "Решите неравенство: log₂(x-1) < 3", answers: ["x < 9", "1 < x < 9", "x > 9", "x > 1"], correct: 1, balls: 2, topic: "Логарифмы", difficulty: "Средняя" },
+            { text: "Найдите площадь боковой поверхности правильной треугольной призмы со стороной основания 4 и высотой 6", answers: ["72", "84", "96", "108"], correct: 0, balls: 2, topic: "Стереометрия", difficulty: "Средняя" },
+            { text: "В сборнике билетов по математике всего 25 билетов, в 10 из них встречается вопрос по логарифмам. Найдите вероятность того, что в случайно выбранном билете будет вопрос по логарифмам", answers: ["0.2", "0.4", "0.5", "0.6"], correct: 1, balls: 1, topic: "Вероятность", difficulty: "Низкая" },
+            { text: "Найдите корень уравнения: √(2x + 5) = 3", answers: ["2", "4", "7", "11"], correct: 0, balls: 1, topic: "Иррациональные", difficulty: "Низкая" },
+            { text: "В треугольнике ABC угол C равен 90°, sin A = 0.6, AC = 8. Найдите AB", answers: ["10", "12", "14", "16"], correct: 0, balls: 1, topic: "Тригонометрия", difficulty: "Средняя" },
+            { text: "Найдите значение выражения: 3⁴·⁵ / 9²·²⁵", answers: ["3", "9", "27", "81"], correct: 0, balls: 1, topic: "Степени", difficulty: "Средняя" },
+            { text: "Материальная точка движется по закону x(t) = t³ - 3t² + 2. Найдите скорость точки в момент времени t = 2", answers: ["0", "2", "4", "6"], correct: 0, balls: 1, topic: "Производная", difficulty: "Средняя" },
+            { text: "Найдите наибольшее значение функции y = x³ - 3x² + 2 на отрезке [-1; 3]", answers: ["2", "4", "6", "8"], correct: 0, balls: 2, topic: "Исследование функций", difficulty: "Высокая" },
+            { text: "Решите систему уравнений: { x + y = 5, 2x - y = 4 }", answers: ["(3,2)", "(2,3)", "(4,1)", "(1,4)"], correct: 0, balls: 1, topic: "Системы", difficulty: "Средняя" },
+            { text: "В цилиндре образующая равна 8, а диагональ осевого сечения 10. Найдите радиус основания", answers: ["3", "4", "5", "6"], correct: 0, balls: 2, topic: "Стереометрия", difficulty: "Высокая" },
+            { text: "Найдите значение выражения: log₂ 8 + log₃ 27", answers: ["5", "6", "7", "8"], correct: 0, balls: 1, topic: "Логарифмы", difficulty: "Низкая" },
+            { text: "В первом сплаве 5% меди, во втором 13% меди. Масса второго сплава больше массы первого на 8 кг. Из них получили третий сплав с содержанием меди 10%. Найдите массу третьего сплава", answers: ["16 кг", "18 кг", "20 кг", "22 кг"], correct: 2, balls: 2, topic: "Текстовые задачи", difficulty: "Высокая" },
+            { text: "Найдите все значения параметра a, при которых уравнение x² - 2ax + a² - 1 = 0 имеет два различных корня", answers: ["a ∈ R", "a > 0", "a < 0", "a ≠ 0"], correct: 0, balls: 3, topic: "Параметры", difficulty: "Очень высокая" },
+            { text: "В правильной четырехугольной пирамиде SABCD точка O - центр основания, S - вершина, SO = 12, BD = 18. Найдите боковое ребро", answers: ["15", "16", "17", "18"], correct: 0, balls: 2, topic: "Стереометрия", difficulty: "Высокая" },
+            { text: "Найдите cos α, если sin α = 0.8 и 0 < α < π/2", answers: ["0.2", "0.4", "0.6", "0.8"], correct: 2, balls: 1, topic: "Тригонометрия", difficulty: "Средняя" },
+            { text: "Найдите сумму корней уравнения: x² - 5x + 6 = 0", answers: ["5", "6", "-5", "-6"], correct: 0, balls: 1, topic: "Квадратные", difficulty: "Низкая" },
+            { text: "Найдите точку максимума функции y = x³ - 3x² + 2", answers: ["0", "1", "2", "3"], correct: 0, balls: 2, topic: "Производная", difficulty: "Средняя" },
+            { text: "Найдите наименьшее целое решение неравенства: 3ˣ < 27", answers: ["1", "2", "3", "4"], correct: 1, balls: 2, topic: "Показательные", difficulty: "Средняя" }
+        ];
+
+        let currentTask = 0;
+        let answers = new Array(19).fill(null);
+        let userPoints = 0;
+
+        // Обновление статистики
+        function updateStats() {
+            const completed = answers.filter(a => a !== null).length;
+            userPoints = answers.reduce((sum, ans, idx) => {
+                return sum + (ans === tasks[idx].correct ? tasks[idx].balls : 0);
+            }, 0);
+            
+            document.getElementById('completedStats').textContent = completed;
+            document.getElementById('pointsStats').textContent = userPoints;
+            document.getElementById('completedCount').textContent = 
+                `${completed}/19 выполнено, ${userPoints} баллов`;
+            document.getElementById('progressFill').style.width = `${(completed / 19) * 100}%`;
+        }
+
+        // Обновление навигации
+        function updateNav() {
+            const navGrid = document.getElementById('taskNav');
+            navGrid.innerHTML = '';
+            
+            for (let i = 0; i < tasks.length; i++) {
+                const navItem = document.createElement('div');
+                navItem.className = 'nav-item';
+                if (i === currentTask) navItem.classList.add('active');
+                else if (answers[i] !== null) navItem.classList.add('completed');
+                
+                navItem.innerHTML = `
+                    <div class="nav-number">${i + 1}</div>
+                    <div class="nav-balls">${tasks[i].balls} б.</div>
+                `;
+                
+                navItem.onclick = () => loadTask(i);
+                navGrid.appendChild(navItem);
+            }
+            
+            updateStats();
+        }
+
+        // Загрузка задания
+        function loadTask(index) {
+            currentTask = index;
+            const task = tasks[index];
+            
+            document.getElementById('taskNumber').textContent = `Задание ${index + 1} из ${tasks.length}`;
+            document.getElementById('taskMeta').innerHTML = `
+                <span>📐 ${task.topic}</span>
+                <span>⚡ Сложность: ${task.difficulty}</span>
+                <span>💯 Баллов: ${task.balls}</span>
+            `;
+            document.getElementById('taskText').textContent = task.text;
+            
+            const answersList = document.getElementById('answersList');
+            answersList.innerHTML = '';
+            
+            task.answers.forEach((answer, i) => {
+                const answerItem = document.createElement('div');
+                answerItem.className = 'answer-item';
+                if (answers[index] === i) answerItem.classList.add('selected');
+                
+                answerItem.innerHTML = `
+                    <div class="answer-checkbox"></div>
+                    <div class="answer-text">${answer}</div>
+                `;
+                
+                answerItem.onclick = () => selectAnswer(index, i);
+                answersList.appendChild(answerItem);
+            });
+            
+            document.getElementById('prevBtn').disabled = index === 0;
+            updateNav();
+        }
+
+        // Выбор ответа
+        function selectAnswer(taskIndex, answerIndex) {
+            answers[taskIndex] = answerIndex;
+            loadTask(currentTask);
+        }
+
+        // Проверка ответа
+        document.getElementById('checkBtn').onclick = () => {
+            const answer = answers[currentTask];
+            if (answer === null) {
+                alert('Выберите ответ!');
+                return;
+            }
+            
+            const task = tasks[currentTask];
+            if (answer === task.correct) {
+                alert(`✅ Правильно! +${task.balls} баллов`);
+            } else {
+                alert(`❌ Неправильно. Правильный ответ: ${task.answers[task.correct]}`);
+            }
+        };
+
+        // Навигация
+        document.getElementById('prevBtn').onclick = () => {
+            if (currentTask > 0) loadTask(currentTask - 1);
+        };
+
+        document.getElementById('nextBtn').onclick = () => {
+            if (currentTask < tasks.length - 1) loadTask(currentTask + 1);
+        };
+
+        // Инициализация
+        loadTask(0);
+        // Функция для кнопки назад
+        function goBack() {
+            if (document.referrer) {
+                history.back();
+            } else {
+                alert('Нет предыдущей страницы');
+                // window.location.href = '/'; // можно раскомментировать для перехода на главную
+            }
+        }
+        // Поддержка клавиши ESC для возврата
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+    </script>
+</body>
+</html>

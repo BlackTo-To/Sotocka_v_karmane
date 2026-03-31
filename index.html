@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Соточка в кармане</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="time-status">
+        <div class="status-icons"></div>
+      </div>
+
+      <!-- Название -->
+      <div class="card1">
+        <div class="title">
+          <p>Соточка в кармане:</p>
+          <div class="bottom">ЕГЭ математика</div>
+        </div>
+        
+        <img src="images/sotochka.jpg" alt="img" class="card-image" />
+      </div>
+    
+<hr class="divider">
+
+        <a href="theory.html" style="text-decoration: none; color: inherit">
+          <div class="card">
+            <!--Теория-->
+            <h2>📘 Теория</h2>
+            <p>Учебник, поиск таблиц, теорем и формул</p>
+          </div>
+        </a>
+
+<hr class="divider">
+
+        <!--Практика-->
+        <a href="practice.html" style="text-decoration: none; color: inherit">
+          <div class="card">
+            <h2>⚡ Практика</h2>
+            <p>Тренировки и отработка ошибок</p>
+          </div>
+        </a>
+    <script>
+        // Интерактивность для карточек //
+        document.querySelectorAll('.card, .goodies-block, .referral-card, .other-subjects, .promo-block, .premium-banner, .stats-container').forEach(el => {
+          el.addEventListener('click', function() {
+            this.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+              this.style.transform = '';
+        }, 100);
+        console.log('Clicked:', this.innerText.slice(0, 30));
+    });
+});
+    </script>
+  </body>
+</html>

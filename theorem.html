@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Теоремы</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #7c8cd1 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* Стрелка назад в левом верхнем углу (как в материалах) */
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            transform: translateX(-5px);
+             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f8f9fa;
+        }
+        .back-arrow {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px 20px;
+        }
+
+        /* Заголовок страницы  */
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+            text-align: left;
+        }
+
+        /* Сетка для теорем (как карточки материалов) */
+        .theorems-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        /* Карточка теоремы в стиле материалов */
+        .theorem-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theorem-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+            border-color: #d0d9e4;
+            transform: translateY(-2px);
+        }
+
+        .theorem-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a2634;
+            margin-bottom: 16px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .theorem-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .theorem-content {
+            color: #546e7a;
+            line-height: 1.6;
+            font-size: 15px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .theorem-formula {
+            background-color: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #1e293b;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            margin: 15px 0 10px;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .theorem-note {
+            font-size: 13px;
+            color: #94a3b8;
+            font-style: italic;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #e2e8f0;
+        }
+
+        /* Карточка для теоремы синусов (особый акцент) */
+        .theorem-card.special {
+            background: linear-gradient(145deg, #ffffff, #fafcff);
+        }
+
+        .theorem-card.special .theorem-formula {
+            background: linear-gradient(135deg, #eef2ff, #ffffff);
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        /* Дополнительный блок с теоремой синусов (как "Печать таблиц" в материалах) */
+        .sine-section {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            margin-bottom: 40px;
+            transition: all 0.2s ease;
+        }
+
+        .sine-section:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+            border-color: #d0d9e4;
+        }
+
+        .sine-section h2 {
+            font-size: 26px;
+            font-weight: 600;
+            color: #1a2634;
+            margin-bottom: 16px;
+        }
+
+        .sine-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .sine-text p {
+            color: #546e7a;
+            line-height: 1.6;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .sine-formula-large {
+            background: #f8fafc;
+            padding: 24px;
+            border-radius: 16px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            font-family: 'Times New Roman', serif;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.02);
+        }
+
+        .sine-note {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 12px;
+        }
+
+        /* Футер (как в материалах) */
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 15px;
+            padding: 30px 0 10px;
+            border-top: 1px solid #edf2f7;
+            margin-top: 20px;
+        }
+
+        .footer .site {
+            font-weight: 600;
+            color: #1a2634;
+            margin-top: 8px;
+            font-size: 18px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .theorems-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sine-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+            
+            .back-arrow {
+                top: 20px;
+                left: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+            
+            h1 {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+            
+            .theorem-card {
+                padding: 22px;
+            }
+            
+            .theorem-title {
+                font-size: 20px;
+            }
+            
+            .photo-container {
+                height: 180px;
+            }
+            
+            .sine-formula-large {
+                font-size: 20px;
+                padding: 18px;
+            }
+        }
+
+        /* Анимация появления */
+        .theorem-card, .photo-section, .sine-section {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .theorem-card:nth-child(1) { animation-delay: 0.1s; }
+        .theorem-card:nth-child(2) { animation-delay: 0.2s; }
+        .theorem-card:nth-child(3) { animation-delay: 0.3s; }
+        .theorem-card:nth-child(4) { animation-delay: 0.4s; }
+        .photo-section { animation-delay: 0.5s; }
+        .sine-section { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Стрелка назад (как в материалах) -->
+    <button class="back-button" onclick="goBack()">
+        <span class="back-arrow">←</span>
+        <span>Назад</span>
+    </button>
+
+    <div class="container">
+        <h1> ТЕОРЕМЫ ГЕОМЕТРИИ</h1>
+        
+        
+        <!-- Сетка теорем (как карточки материалов) -->
+        <div class="theorems-grid">
+            <!-- Теорема о сумме углов -->
+            <div class="theorem-card">
+                <h2 class="theorem-title">Сумма углов треугольника</h2>
+                <div class="theorem-content">
+                    Сумма углов треугольника на евклидовой плоскости равна 180°.
+                </div>
+                <div class="theorem-formula">
+                    α + β + γ = 180°
+                </div>
+                <div class="theorem-note">
+                    Справедливо для любого треугольника
+                </div>
+            </div>
+
+            <!-- Теорема Пифагора -->
+            <div class="theorem-card">
+                <h2 class="theorem-title">Теорема Пифагора</h2>
+                <div class="theorem-content">
+                    В прямоугольном треугольнике квадрат гипотенузы равен сумме квадратов катетов.
+                </div>
+                <div class="theorem-formula">
+                    a² + b² = c²
+                </div>
+                <div class="theorem-note">
+                    Только для прямоугольных треугольников
+                </div>
+            </div>
+
+            <!-- Теорема косинусов -->
+            <div class="theorem-card">
+                <h2 class="theorem-title">Теорема косинусов</h2>
+                <div class="theorem-content">
+                    Квадрат стороны треугольника равен сумме квадратов двух других сторон минус удвоенное произведение этих сторон на косинус угла между ними.
+                </div>
+                <div class="theorem-formula">
+                    a² = b² + c² - 2bc·cos α
+                </div>
+                <div class="theorem-note">
+                    Обобщение теоремы Пифагора
+                </div>
+            </div>
+
+            <!-- Теорема синусов (в карточке) -->
+            <div class="theorem-card special">
+                <h2 class="theorem-title">Теорема синусов</h2>
+                <div class="theorem-content">
+                    Стороны треугольника пропорциональны синусам противолежащих углов.
+                </div>
+                <div class="theorem-formula">
+                    a/sin α = b/sin β = c/sin γ = 2R
+                </div>
+                <div class="theorem-note">
+                    R — радиус описанной окружности
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Интерактивность для карточек (как в материалах)
+        document.querySelectorAll('.theorem-card, .photo-section, .sine-section').forEach(el => {
+            el.addEventListener('click', function(e) {
+                // Не срабатывает при клике на ссылку
+                if (e.target.tagName !== 'A') {
+                    this.style.backgroundColor = '#f8f9fa';
+                    setTimeout(() => {
+                        this.style.backgroundColor = '';
+                    }, 100);
+                }
+            });
+        });
+         // Функция для кнопки назад
+        function goBack() {
+            if (document.referrer) {
+                history.back();
+            } else {
+                alert('Нет предыдущей страницы');
+            }
+        }
+    </script>
+</body>
+</html>
